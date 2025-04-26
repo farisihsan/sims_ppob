@@ -17,7 +17,7 @@
             
             <h2>Lengkapi data untuk membuat akun</h2>
             
-            <form class="auth-form" action="<?= base_url('register') ?>" method="POST">
+            <form class="auth-form" action="<?= base_url('api/registration') ?>" method="POST">
                 <div class="input-group">
                     <div class="input-icon">
                         <img src="<?= base_url('images/mail.svg') ?>" alt="Email">
@@ -84,19 +84,5 @@
             <img src="<?= base_url('assets/images/illustrasi-login.png') ?>" alt="Illustration" class="illustration-image">
         </div>
     </div>
-
-    <script>
-        document.querySelectorAll('.toggle-password').forEach(button => {
-            button.addEventListener('click', function() {
-                const input = this.previousElementSibling;
-                const icon = this.querySelector('img');
-                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-                input.setAttribute('type', type);
-                icon.src = type === 'password' 
-                    ? '<?= base_url('images/eye-off.svg') ?>' 
-                    : '<?= base_url('images/eye.svg') ?>';
-            });
-        });
-    </script>
 </body>
 </html> 

@@ -18,7 +18,7 @@ class AuthApiController extends BaseController
 
         if (!$this->validate($rules)) {
             return $this->response->setJSON([
-                'status' => false,
+                'status' => 102,
                 'message' => 'Validasi gagal',
                 'errors' => $this->validator->getErrors()
             ])->setStatusCode(400);
@@ -34,9 +34,10 @@ class AuthApiController extends BaseController
         ]);
 
         return $this->response->setJSON([
-            'status' => true,
-            'message' => 'Registrasi berhasil'
-        ]);
+            'status' => 0,
+            'message' => 'Registrasi berhasil',
+            'redirect' => base_url('login')
+        ])->setStatusCode(200);
     }
 
     public function login()
@@ -48,7 +49,7 @@ class AuthApiController extends BaseController
 
         if (!$this->validate($rules)) {
             return $this->response->setJSON([
-                'status' => false,
+                'status' => 102,
                 'message' => 'Validasi gagal',
                 'errors' => $this->validator->getErrors()
             ])->setStatusCode(400);
@@ -59,17 +60,114 @@ class AuthApiController extends BaseController
 
         if (!$user || !password_verify($this->request->getPost('password'), $user['password'])) {
             return $this->response->setJSON([
-                'status' => false,
+                'status' => 103,
                 'message' => 'Email atau password salah'
             ])->setStatusCode(401);
         }
 
-        // Contoh: return data user (tanpa password)
+        // Set session user
+        session()->set([
+            'isLoggedIn' => true,
+            'user' => [
+                'id' => $user['id'],
+                'first_name' => $user['first_name'],
+                'last_name' => $user['last_name'],
+                'email' => $user['email'],
+                'saldo' => isset($user['saldo']) ? $user['saldo'] : 0
+            ]
+        ]);
+
+        // Return success response with redirect URL
         unset($user['password']);
         return $this->response->setJSON([
-            'status' => true,
-            'message' => 'Login berhasil',
+            'status' => 0,
+            'message' => 'Login Berhasil',
+            'redirect' => base_url('/'),
             'user' => $user
+        ])->setStatusCode(200);
+    }
+
+    public function logout()
+    {
+        // Destroy the session
+        session()->destroy();
+        
+        // Return success response with redirect URL
+        return $this->response->setJSON([
+            'status' => 0,
+            'message' => 'Logout Berhasil',
+            'redirect' => base_url('login')
+        ])->setStatusCode(200);
+    }
+
+    public function updateProfile()
+    {
+        // Check if user is logged in
+        if (!session()->get('isLoggedIn')) {
+            return $this->response->setJSON([
+                'status' => 103,
+                'message' => 'Unauthorized'
+            ])->setStatusCode(401);
+        }
+
+        $rules = [
+            'first_name' => 'required|min_length[1]',
+            'last_name' => 'required|min_length[1]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return $this->response->setJSON([
+                'status' => 102,
+                'message' => 'Validasi gagal',
+                'errors' => $this->validator->getErrors()
+            ])->setStatusCode(400);
+        }
+
+        $userModel = new User();
+        $userId = session()->get('user.id');
+        
+        // Update user profile
+        $userModel->update($userId, [
+            'first_name' => $this->request->getPost('first_name'),
+            'last_name' => $this->request->getPost('last_name')
         ]);
+
+        // Update session data
+        $user = $userModel->find($userId);
+        session()->set([
+            'user' => [
+                'id' => $user['id'],
+                'first_name' => $user['first_name'],
+                'last_name' => $user['last_name'],
+                'email' => $user['email'],
+                'saldo' => isset($user['saldo']) ? $user['saldo'] : 0
+            ]
+        ]);
+
+        return $this->response->setJSON([
+            'status' => 0,
+            'message' => 'Profil berhasil diperbarui',
+            'user' => [
+                'first_name' => $user['first_name'],
+                'last_name' => $user['last_name'],
+                'email' => $user['email']
+            ]
+        ])->setStatusCode(200);
+    }
+
+    public function getProfile()
+    {
+        if (!session()->get('isLoggedIn')) {
+            return $this->response->setJSON([
+                'status' => 103,
+                'message' => 'Unauthorized'
+            ])->setStatusCode(401);
+        }
+        $user = session()->get('user');
+        return $this->response->setJSON([
+            'status' => 0,
+            'message' => 'Data profil berhasil diambil',
+            'user' => $user
+        ])->setStatusCode(200);
     }
 }

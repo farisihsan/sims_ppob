@@ -12,11 +12,12 @@
                 </svg>
             </button>
         </div>
-        <h2 class="profile-name">
+        <h2 class="profile-name" id="profile-name">
             <?= esc($user['first_name'] . ' ' . $user['last_name']) ?>
         </h2>
     </div>
-    <form method="post" action="<?= base_url('profile/update') ?>" class="profile-form">
+    <form id="profile-form" class="profile-form">
+        <div id="profile-alert" style="display:none;"></div>
         <div class="form-group">
             <label class="form-label">Email</label>
             <div class="input-group">
@@ -47,6 +48,16 @@
         <button type="submit" class="profile-save-btn">
             Simpan
         </button>
+        
+        <div class="logout-section">
+            <button type="button" id="logout-btn" class="logout-btn">
+                Logout
+            </button>
+        </div>
     </form>
 </main>
+
+<?= $this->section('script') ?>
+<?= $this->endSection() ?>
+
 <?= $this->endSection() ?>

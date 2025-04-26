@@ -6,7 +6,6 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// Redirect root ke halaman login
 
 
 // Routes untuk autentikasi
@@ -26,7 +25,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function($routes) {
 // Routes yang membutuhkan autentikasi
 $routes->group('', ['namespace' => 'App\Controllers', 'filter' => 'auth'], function($routes) {
     $routes->get('/', 'HomeController::index');
+    $routes->get('api/profile', 'Api\AuthApiController::getProfile');
     $routes->get('profile', 'HomeController::profile');
+    $routes->post('api/logout', 'Api\AuthApiController::logout');
+    $routes->post('api/profile/update', 'Api\AuthApiController::updateProfile');
 });
 
 $routes->post('api/registration', 'Api\AuthApiController::register');
