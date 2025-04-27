@@ -6,6 +6,7 @@
     <title><?= isset($title) ? $title : 'SIMS PPOB' ?></title>
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- Header -->
@@ -21,7 +22,7 @@
                 $currentPath = service('uri')->getPath();
             ?>
             <nav>
-                <a href="/top-up" class="<?= $currentPath == 'top-up' ? 'active-nav' : '' ?>">Top Up</a>
+                <a href="/topup" class="<?= $currentPath == 'topup' ? 'active-nav' : '' ?>">Top Up</a>
                 <a href="/transaction" class="<?= $currentPath == 'transaction' ? 'active-nav' : '' ?>">Transaction</a>
                 <a href="/profile" class="<?= $currentPath == 'profile' ? 'active-nav' : '' ?>">Akun</a>
             </nav>

@@ -17,7 +17,13 @@
             
             <h2>Masuk atau buat akun untuk memulai</h2>
             
-            <form class="auth-form" action="<?= base_url('api/login') ?>" method="POST">
+            <?php if (session()->getFlashdata('message')): ?>
+                <div class="alert-success">
+                    <?= session()->getFlashdata('message') ?>
+                </div>
+            <?php endif; ?>
+            
+            <form class="auth-form" id="loginForm" action="<?= base_url('login') ?>" method="POST">
                 <div class="input-group">
                     <div class="input-icon">
                         <img src="<?= base_url('images/mail.svg') ?>" alt="Email">
@@ -51,5 +57,7 @@
             <img src="<?= base_url('assets/images/illustrasi-login.png') ?>" alt="Illustration" class="illustration-image">
         </div>
     </div>
+
+    <script src="<?= base_url('js/script.js') ?>"></script>
 </body>
 </html> 

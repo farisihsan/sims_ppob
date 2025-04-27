@@ -17,7 +17,7 @@
             
             <h2>Lengkapi data untuk membuat akun</h2>
             
-            <form class="auth-form" action="<?= base_url('api/registration') ?>" method="POST">
+            <form class="auth-form" action="/registration" method="POST">
                 <div class="input-group">
                     <div class="input-icon">
                         <img src="<?= base_url('images/mail.svg') ?>" alt="Email">
@@ -84,5 +84,6 @@
             <img src="<?= base_url('assets/images/illustrasi-login.png') ?>" alt="Illustration" class="illustration-image">
         </div>
     </div>
+    <script src="<?= base_url('js/script.js') ?>"></script>
 </body>
 </html> 

@@ -4,19 +4,19 @@
 <main class="main-container profile-page">
     <div class="profile-header">
         <div class="profile-photo-wrapper">
-            <img src="/assets/images/Profile%20Photo.png" alt="Profile" class="profile-photo">
-            <button type="button" class="profile-photo-edit">
-                <svg width="18" height="18" fill="none" stroke="#222" stroke-width="2" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 8.6 15a1.65 1.65 0 0 0-1.82-.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 5 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 15 8.6a1.65 1.65 0 0 0 1.82.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 15z"/>
-                </svg>
-            </button>
+            <img src="<?= isset($user['photo']) ? $user['photo'] : '/assets/images/Profile%20Photo.png' ?>" alt="Profile" class="profile-photo">
+            <form id="photo-upload-form" action="<?= base_url('profile/upload-photo') ?>" method="post" enctype="multipart/form-data">
+                <input type="file" id="photo-input" name="photo" accept="image/*" style="display:none;" onchange="document.getElementById('photo-upload-form').submit()">
+                <button type="button" class="profile-photo-edit" onclick="document.getElementById('photo-input').click()">
+                    <i class="fa-solid fa-upload"></i>
+                </button>
+            </form>
         </div>
         <h2 class="profile-name" id="profile-name">
             <?= esc($user['first_name'] . ' ' . $user['last_name']) ?>
         </h2>
     </div>
-    <form id="profile-form" class="profile-form">
+    <form class="auth-form" id="profile-form" action="<?= base_url('profile/update') ?>" method="POST">
         <div id="profile-alert" style="display:none;"></div>
         <div class="form-group">
             <label class="form-label">Email</label>
@@ -57,7 +57,24 @@
     </form>
 </main>
 
+<!-- Modal Logout -->
+<div class="modal" id="logout-modal">
+    <div class="modal-content">
+        <div class="modal-topup-icon">
+            <span class="icon-cross"><i class="fa fa-sign-out"></i></span>
+        </div>
+        <div class="modal-topup-message">
+            Anda yakin ingin logout?
+        </div>
+        <div class="modal-topup-action">
+            <button id="confirm-logout" class="btn-confirm-topup">Ya, Logout</button>
+            <button id="cancel-logout" class="btn-cancel-topup">Batalkan</button>
+        </div>
+    </div>
+</div>
+
 <?= $this->section('script') ?>
+<script src="<?= base_url('js/script.js') ?>"></script>
 <?= $this->endSection() ?>
 
 <?= $this->endSection() ?>

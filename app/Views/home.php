@@ -4,7 +4,7 @@
 <main class="main-container">
     <div class="profile-saldo-container">
         <div class="profile-section">
-            <img src="/assets/images/Profile%20Photo.png" alt="Profile">
+            <img src="<?= isset($user['photo']) ? $user['photo'] : '/assets/images/Profile%20Photo.png' ?>" alt="Profile">
             <div>
                 <div class="welcome">Selamat datang,</div>
                 <div class="name">
@@ -15,7 +15,7 @@
         <div class="saldo-card">
             <div style="font-size:1.1rem;opacity:0.9;">Saldo anda</div>
             <h3>
-                Rp <span id="saldo-value" style="letter-spacing:4px;">••••••••</span>
+                Rp <span id="saldo-value" data-saldo="<?= isset($user) && isset($user['saldo']) ? number_format($user['saldo'], 0, ',', '.') : '0' ?>">••••••••</span>
             </h3>
             <button type="button" class="lihat-saldo" id="toggle-saldo">
                 <span id="toggle-saldo-text">Lihat Saldo</span>
@@ -106,57 +106,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
-<script>
-    // --- Toggle Saldo ---
-    const saldoAsli = "<?= isset($user) && isset($user['saldo']) ? number_format($user['saldo'], 0, ',', '.') : '0' ?>";
-    const saldoValue = document.getElementById('saldo-value');
-    const toggleBtn = document.getElementById('toggle-saldo');
-    const toggleText = document.getElementById('toggle-saldo-text');
-    let isHidden = true;
-
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', function() {
-            if (isHidden) {
-                saldoValue.textContent = saldoAsli;
-                toggleText.textContent = "Sembunyikan Saldo";
-            } else {
-                saldoValue.textContent = "••••••••";
-                toggleText.textContent = "Lihat Saldo";
-            }
-            isHidden = !isHidden;
-        });
-    }
-
-    // --- Auto Slider Promo ---
-    const promoSlider = document.getElementById('promo-slider');
-    const cardWidth = 278; 
-    let autoSlideInterval;
-
-    function slideNext() {
-        promoSlider.scrollBy({ left: cardWidth, behavior: 'smooth' });
-        
-        if (promoSlider.scrollLeft + promoSlider.offsetWidth >= promoSlider.scrollWidth - 1) {
-            setTimeout(() => {
-                promoSlider.scrollTo({ left: 0, behavior: 'auto' });
-            }, 400);
-        }
-    }
-
-    if (promoSlider) {
-        
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(slideNext, 3000);
-        }
-        function stopAutoSlide() {
-            clearInterval(autoSlideInterval);
-        }
-
-        
-        startAutoSlide();
-
-        
-        promoSlider.addEventListener('mouseenter', stopAutoSlide);
-        promoSlider.addEventListener('mouseleave', startAutoSlide);
-    }
-</script>
+<script src="<?= base_url('js/script.js') ?>"></script>
 <?= $this->endSection() ?> 

@@ -36,6 +36,11 @@ class User extends Migration
                 'constraint' => '255',
                 'null'       => false,
             ],
+            'photo' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '255',
+                'null'       => true,
+            ],
             'saldo' => [
                 'type'       => 'BIGINT',
                 'constraint' => 20,

@@ -9,15 +9,12 @@ use CodeIgniter\Router\RouteCollection;
 
 
 // Routes untuk autentikasi
-$routes->group('', ['namespace' => 'App\Controllers'], function($routes) {
+$routes->group('', ['namespace' => 'App\Controllers\Api'], function($routes) {
     // GET routes untuk menampilkan form
     $routes->get('register', 'AuthController::register');
+    $routes->post('registration', 'AuthController::submitRegistration');
     $routes->get('login', 'AuthController::login');
-    
-    // POST routes untuk memproses form
-    $routes->post('register', 'AuthController::processRegister');
-    $routes->post('login', 'AuthController::processLogin');
-    
+    $routes->post('login', 'AuthController::submitLogin');
     // Logout route
     $routes->get('logout', 'AuthController::logout');
 });
@@ -25,11 +22,14 @@ $routes->group('', ['namespace' => 'App\Controllers'], function($routes) {
 // Routes yang membutuhkan autentikasi
 $routes->group('', ['namespace' => 'App\Controllers', 'filter' => 'auth'], function($routes) {
     $routes->get('/', 'HomeController::index');
-    $routes->get('api/profile', 'Api\AuthApiController::getProfile');
+    $routes->get('topup', 'HomeController::topup');
     $routes->get('profile', 'HomeController::profile');
-    $routes->post('api/logout', 'Api\AuthApiController::logout');
-    $routes->post('api/profile/update', 'Api\AuthApiController::updateProfile');
+    $routes->group('', ['namespace' => 'App\Controllers\Api'], function($routes) {
+        $routes->post('/profile/update', 'Api\AuthController::updateProfile');
+        $routes->post('logout', 'Api\AuthController::logout');
+        $routes->post('profile/image', 'Api\AuthController::uploadPhoto');
+    });
+    $routes->post('topup', 'TransaksiController::topup');
+    $routes->get('pbb', 'HomeController::pbb');
+    $routes->post('pbb', 'TransaksiController::pbb');
 });
-
-$routes->post('api/registration', 'Api\AuthApiController::register');
-$routes->post('api/login', 'Api\AuthApiController::login');

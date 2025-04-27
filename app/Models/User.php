@@ -17,7 +17,8 @@ class User extends Model
         'first_name',
         'last_name',
         'password',
-        'saldo'
+        'saldo',
+        'photo'
     ];
 
     protected bool $allowEmptyInserts = false;
