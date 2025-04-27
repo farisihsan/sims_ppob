@@ -29,7 +29,15 @@ $routes->group('', ['namespace' => 'App\Controllers', 'filter' => 'auth'], funct
         $routes->post('logout', 'Api\AuthController::logout');
         $routes->post('profile/image', 'Api\AuthController::uploadPhoto');
     });
+
+    $routes->get('transaksi', 'HomeController::transaksi');
+    
     $routes->post('topup', 'TransaksiController::topup');
     $routes->get('pbb', 'HomeController::pbb');
     $routes->post('pbb', 'TransaksiController::pbb');
+    $routes->get('listrik', 'HomeController::listrik');
+    $routes->post('listrik', 'TransaksiController::listrik');
+    $routes->get('pulsa', 'HomeController::pulsa');
+    $routes->post('pulsa', 'TransaksiController::pulsa');
 });
+    

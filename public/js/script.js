@@ -185,6 +185,126 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+document.addEventListener('DOMContentLoaded', function() {
+    const listrikBtn = document.getElementById('listrik-submit-btn');
+    const modal = document.getElementById('listrik-modal');
+    const confirmBtn = document.getElementById('confirm-listrik');
+    const cancelBtn = document.getElementById('cancel-listrik');
+    const modalIcon = document.getElementById('modal-listrik-icon');
+    const modalMsg = document.getElementById('modal-listrik-message');
+    const modalNominal = document.getElementById('modal-listrik-nominal');
+    const modalAction = document.getElementById('modal-listrik-action');
+    const modalBack = document.getElementById('modal-listrik-back');
+    const nominalInput = document.querySelector('input[name="nominal"]');
+
+    let nominalValue = 0;
+
+    if (listrikBtn && modal && confirmBtn && cancelBtn) {
+        listrikBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            nominalValue = nominalInput.value;
+            modal.classList.add('show');
+            modalIcon.innerHTML = '<span class="icon-wallet"><i class="fa fa-wallet"></i></span>';
+            modalMsg.innerHTML = 'Anda yakin untuk membayar Listrik sebesar';
+            modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b> ?';
+            modalAction.style.display = '';
+            modalBack.style.display = 'none';
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            modal.classList.remove('show');
+        });
+
+        confirmBtn.addEventListener('click', function() {
+            fetch('/listrik', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'nominal=' + encodeURIComponent(nominalValue)
+            })
+            .then(res => res.json())
+            .then(res => {
+                modalAction.style.display = 'none';
+                modalBack.style.display = '';
+                if (res.status === 'success') {
+                    modalIcon.innerHTML = '<span class="icon-check"><i class="fa fa-check"></i></span>';
+                    modalMsg.innerHTML = 'Pembayaran Listrik sebesar';
+                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>berhasil!';
+                } else {
+                    modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
+                    modalMsg.innerHTML = 'Pembayaran Listrik sebesar';
+                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>gagal';
+                }
+            })
+            .catch(() => {
+                modalAction.style.display = 'none';
+                modalBack.style.display = '';
+                modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
+                modalMsg.innerHTML = 'Pembayaran Listrik gagal';
+                modalNominal.innerHTML = '';
+            });
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const pulsaBtn = document.getElementById('pulsa-submit-btn');
+    const modal = document.getElementById('pulsa-modal');
+    const confirmBtn = document.getElementById('confirm-pulsa');
+    const cancelBtn = document.getElementById('cancel-pulsa');
+    const modalIcon = document.getElementById('modal-pulsa-icon');
+    const modalMsg = document.getElementById('modal-pulsa-message');
+    const modalNominal = document.getElementById('modal-pulsa-nominal');
+    const modalAction = document.getElementById('modal-pulsa-action');
+    const modalBack = document.getElementById('modal-pulsa-back');
+    const nominalInput = document.querySelector('input[name="nominal"]');
+
+    let nominalValue = 0;
+
+    if (pulsaBtn && modal && confirmBtn && cancelBtn) {
+        pulsaBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            nominalValue = nominalInput.value;
+            modal.classList.add('show');
+            modalIcon.innerHTML = '<span class="icon-wallet"><i class="fa fa-wallet"></i></span>';
+            modalMsg.innerHTML = 'Anda yakin untuk membayar pulsa sebesar';
+            modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b> ?';
+            modalAction.style.display = '';
+            modalBack.style.display = 'none';
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            modal.classList.remove('show');
+        });
+
+        confirmBtn.addEventListener('click', function() {
+            fetch('/pulsa', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'nominal=' + encodeURIComponent(nominalValue)
+            })
+            .then(res => res.json())
+            .then(res => {
+                modalAction.style.display = 'none';
+                modalBack.style.display = '';
+                if (res.status === 'success') {
+                    modalIcon.innerHTML = '<span class="icon-check"><i class="fa fa-check"></i></span>';
+                    modalMsg.innerHTML = 'Pembayaran pulsa sebesar';
+                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>berhasil!';
+                } else {
+                    modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
+                    modalMsg.innerHTML = 'Pembayaran pulsa sebesar';
+                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>gagal';
+                }
+            })
+            .catch(() => {
+                modalAction.style.display = 'none';
+                modalBack.style.display = '';
+                modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
+                modalMsg.innerHTML = 'Pembayaran pulsa gagal';
+                modalNominal.innerHTML = '';
+            });
+        });
+    }
+});
 
 document.querySelectorAll('.topup-nominal-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {

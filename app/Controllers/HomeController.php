@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-
+use App\Models\Transaction;
 class HomeController extends BaseController
 {
     public function index()
@@ -20,6 +20,13 @@ class HomeController extends BaseController
     {
         $user = session()->get('user');
         return view('profile/topup', ['user' => $user]);
+    }
+    public function transaksi(){
+        $user = session()->get('user');
+        $transaction = new Transaction();
+        $transaction = $transaction->where('user_id', $user['id'])->findAll();
+        
+        return view('transaction/history', ['transaction' => $transaction, 'user' => $user]);
     }
     public function pbb()
     {

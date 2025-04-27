@@ -34,34 +34,10 @@
         </div> 
         <form action="<?= base_url('pbb') ?>" method="post" class="transaction-form">
             <input type="number" name="nominal" placeholder="Masukan Nominal Pembayaran PBB">
-            <button type="submit">Bayar</button>
+            <button type="submit" class="pbb-submit-btn" id="pbb-submit-btn">Bayar</button>
         </form>
     </div>
 </main>
-
-<!-- Modal Konfirmasi Top Up -->
-<div class="modal" id="pbb-modal">
-    <div class="modal-content">
-        <div id="modal-pbb-icon" class="modal-transaction-icon">
-        <!-- Icon akan diisi via JS -->
-        </div>
-        <div id="modal-pbb-message" class="modal-transaction-message">
-        <!-- Pesan akan diisi via JS -->
-        </div>
-        <div id="modal-pbb-nominal" class="modal-transaction-nominal">
-        <!-- Nominal akan diisi via JS -->
-        </div>
-        <div id="modal-pbb-action" class="modal-transaction-action">
-            <button id="confirm-pbb" class="btn-confirm-transaction">Ya, lanjutkan Top Up</button>
-            <button id="cancel-pbb" class="btn-cancel-transaction">Batalkan</button>
-        </div>
-        <div id="modal-pbb-back" class="modal-transaction-back" style="display:none;">
-            <a href="/" class="btn-back-transaction">Kembali ke Beranda</a>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Konfirmasi PBB -->
 <div class="modal" id="pbb-modal">
   <div class="modal-content">
     <div id="modal-pbb-icon" class="modal-topup-icon"></div>
@@ -76,8 +52,6 @@
     </div>
   </div>
 </div>
-
-<!-- Modal Konfirmasi Logout -->
 
 
 <?= $this->endSection() ?>

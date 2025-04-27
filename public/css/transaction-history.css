@@ -1,0 +1,107 @@
+/* Transaction History Custom Styling */
+.transaction-history-container {
+    max-width: 1000px;
+    margin: 32px auto;
+    background: none;
+}
+
+.transaction-history-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 18px;
+}
+
+.transaction-history-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.transaction-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 18px 28px 14px 28px;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s;
+    border: 1px solid #f2f2f2;
+}
+.transaction-card:hover {
+    box-shadow: 0 4px 16px rgba(229,57,53,0.08);
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.service-name {
+    font-size: 1.08rem;
+    font-weight: 500;
+    color: #222;
+}
+.transaction-date {
+    font-size: 0.93rem;
+    color: #aaa;
+    font-weight: 400;
+}
+.card-body {
+    display: flex;
+    align-items: center;
+}
+.amount-container {
+    flex: 1;
+}
+.transaction-amount {
+    font-size: 1.18rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.amount-plus {
+    color: #2ecc71;
+}
+.amount-minus {
+    color: #F44336;
+}
+
+/* Show more button */
+.show-more-btn {
+    display: block;
+    margin: 24px auto 0 auto;
+    color: #F44336;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.show-more-btn:hover {
+    color: #b71c1c;
+}
+
+@media (max-width: 600px) {
+    .transaction-history-container {
+        max-width: 98vw;
+        padding: 0 4vw;
+    }
+    .transaction-card {
+        padding: 14px 10px 10px 14px;
+    }
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+    .service-name {
+        font-size: 1rem;
+    }
+    .transaction-date {
+        font-size: 0.85rem;
+    }
+    .transaction-amount {
+        font-size: 1.05rem;
+    }
+} 
