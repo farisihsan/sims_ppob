@@ -33,24 +33,31 @@
             <span>PBB</span>
         </div> 
         <form action="<?= base_url('pbb') ?>" method="post" class="transaction-form">
-            <input type="number" name="nominal" placeholder="Masukan Nominal Pembayaran PBB">
-            <button type="submit" class="pbb-submit-btn" id="pbb-submit-btn">Bayar</button>
+            <div class="input-group-transaction">
+                <span class="input-icon-transaction">
+                    <i class="fa-solid fa-money-bill"></i>
+                </span>
+                <input type="number" name="nominal" placeholder="Masukan Nominal Pembayaran PBB">
+            </div>
+            <button type="button" class="submit-btn pbb-submit-btn" data-endpoint="<?= base_url('pbb') ?>" data-label="PBB" id="pbb-submit-btn">
+                Bayar
+            </button>
         </form>
     </div>
 </main>
-<div class="modal" id="pbb-modal">
-  <div class="modal-content">
-    <div id="modal-pbb-icon" class="modal-topup-icon"></div>
-    <div id="modal-pbb-message" class="modal-topup-message"></div>
-    <div id="modal-pbb-nominal" class="modal-topup-nominal"></div>
-    <div id="modal-pbb-action" class="modal-topup-action">
-      <button id="confirm-pbb" class="btn-confirm-topup">Ya, lanjutkan Bayar</button>
-      <button id="cancel-pbb" class="btn-cancel-topup">Batalkan</button>
+<div class="modal" id="modaltransaction">
+    <div class="modal-content">
+        <div id="modal-icon" class="modal-topup-icon"></div>
+        <div id="modal-message" class="modal-topup-message"></div>
+        <div id="modal-nominal" class="modal-topup-nominal"></div>
+        <div id="modal-action" class="modal-topup-action">
+            <button id="confirm-btn" class="btn-confirm-topup">Ya, lanjutkan Bayar</button>
+            <button id="cancel-btn" class="btn-cancel-topup">Batalkan</button>
+        </div>
+        <div id="modal-back" class="modal-topup-back" style="display:none;">
+            <a href="/" class="btn-back-topup">Kembali ke Beranda</a>
+        </div>
     </div>
-    <div id="modal-pbb-back" class="modal-topup-back" style="display:none;">
-      <a href="/" class="btn-back-topup">Kembali ke Beranda</a>
-    </div>
-  </div>
 </div>
 
 

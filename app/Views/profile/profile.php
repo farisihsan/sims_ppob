@@ -5,7 +5,7 @@
     <div class="profile-header">
         <div class="profile-photo-wrapper">
             <img src="<?= isset($user['photo']) ? $user['photo'] : '/assets/images/Profile%20Photo.png' ?>" alt="Profile" class="profile-photo">
-            <form id="photo-upload-form" action="<?= base_url('profile/upload-photo') ?>" method="post" enctype="multipart/form-data">
+            <form id="photo-upload-form" action="<?= base_url('profile/image') ?>" method="post" enctype="multipart/form-data">
                 <input type="file" id="photo-input" name="photo" accept="image/*" style="display:none;" onchange="document.getElementById('photo-upload-form').submit()">
                 <button type="button" class="profile-photo-edit" onclick="document.getElementById('photo-input').click()">
                     <i class="fa-solid fa-upload"></i>

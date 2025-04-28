@@ -32,43 +32,45 @@
             <span class="topup-label-bold">Nominal Top Up</span>
         </div> 
         <form action="<?= base_url('topup') ?>" method="post" id="topup-form">
-            <div class="topup-nominal-grid">
-                <input type="number" name="nominal" min="10000" step="1000" placeholder="masukan nominal Top Up" class="topup-input" autocomplete="off">
-                <button type="button" class="topup-nominal-btn" data-value="10000">Rp10.000</button>
-                <button type="button" class="topup-nominal-btn" data-value="20000">Rp20.000</button>
-                <button type="button" class="topup-nominal-btn" data-value="50000">Rp50.000</button>
-                <button type="button" class="topup-nominal-btn" data-value="100000">Rp100.000</button>
-                <button type="button" class="topup-nominal-btn" data-value="250000">Rp250.000</button>
-                <button type="button" class="topup-nominal-btn" data-value="500000">Rp500.000</button>
+            <div class="topup-grid">
+                <div class="input-group-topup">
+                    <span class="input-icon-topup">
+                        <i class="fa-solid fa-money-bill"></i>
+                    </span>
+                    <input type="number" name="nominal" min="10000" step="1000" placeholder="masukan nominal Top Up" class="topup-input" autocomplete="off">
+                </div>
+                <div class="topup-button-grid">
+                    <button type="button" class="topup-nominal-btn" data-value="10000">Rp10.000</button>
+                    <button type="button" class="topup-nominal-btn" data-value="20000">Rp20.000</button>
+                    <button type="button" class="topup-nominal-btn" data-value="50000">Rp50.000</button>
+                    <button type="button" class="topup-nominal-btn" data-value="100000">Rp100.000</button>
+                    <button type="button" class="topup-nominal-btn" data-value="250000">Rp250.000</button>
+                    <button type="button" class="topup-nominal-btn" data-value="500000">Rp500.000</button>
+                </div>
             </div>
-            <button type="submit" class="topup-submit-btn" disabled id="topup-submit-btn">Top Up</button>
+            <button type="button" class="submit-btn topup-submit-btn" data-endpoint="<?= base_url('topup') ?>" data-label="Top Up" id="topup-submit-btn">
+                Top Up
+            </button>
         </form>
     </div>
 </main>
 
 <!-- Modal Konfirmasi Top Up -->
-<div class="modal" id="topup-modal">
+<div class="modal" id="modaltransaction">
     <div class="modal-content">
-        <div id="modal-topup-icon" class="modal-topup-icon">
-        <!-- Icon akan diisi via JS -->
+        <div id="modal-icon" class="modal-topup-icon"></div>
+        <div id="modal-message" class="modal-topup-message"></div>
+        <div id="modal-nominal" class="modal-topup-nominal"></div>
+        <div id="modal-action" class="modal-topup-action">
+            <button id="confirm-btn" class="btn-confirm-topup">Ya, lanjutkan Bayar</button>
+            <button id="cancel-btn" class="btn-cancel-topup">Batalkan</button>
         </div>
-        <div id="modal-topup-message" class="modal-topup-message">
-        <!-- Pesan akan diisi via JS -->
-        </div>
-        <div id="modal-topup-nominal" class="modal-topup-nominal">
-        <!-- Nominal akan diisi via JS -->
-        </div>
-        <div id="modal-topup-action" class="modal-topup-action">
-            <button id="confirm-topup" class="btn-confirm-topup">Ya, lanjutkan Top Up</button>
-            <button id="cancel-topup" class="btn-cancel-topup">Batalkan</button>
-        </div>
-        <div id="modal-topup-back" class="modal-topup-back" style="display:none;">
+        <div id="modal-back" class="modal-topup-back" style="display:none;">
             <a href="/" class="btn-back-topup">Kembali ke Beranda</a>
         </div>
     </div>
 </div>
 
-<!-- Modal Konfirmasi Logout -->
 
 
 <?= $this->endSection() ?>

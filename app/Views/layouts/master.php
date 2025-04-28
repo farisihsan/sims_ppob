@@ -23,7 +23,7 @@
             ?>
             <nav>
                 <a href="/topup" class="<?= $currentPath == 'topup' ? 'active-nav' : '' ?>">Top Up</a>
-                <a href="<?= base_url('transaksi') ?>" class="<?= $currentPath == 'transaction' ? 'active-nav' : '' ?>">Transaction</a>
+                <a href="<?= base_url('transaksi/history') ?>" class="<?= $currentPath == 'transaction' ? 'active-nav' : '' ?>">Transaction</a>
                 <a href="/profile" class="<?= $currentPath == 'profile' ? 'active-nav' : '' ?>">Akun</a>
             </nav>
         </div>

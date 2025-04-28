@@ -1,9 +1,32 @@
 /* Transaction History Custom Styling */
+.transaction-main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 0 0 0;
+}
 .transaction-history-container {
     max-width: 1000px;
-    margin: 32px auto;
+    margin: 10px auto 100px auto;
     background: none;
 }
+.bulan-filter {
+    display: flex;
+    gap: 10px;
+    /* justify-content: space-between; */
+    margin-bottom: 18px;
+    font-weight:bold;
+    color:#F44336;
+}
+.bulan-filter a {
+    text-decoration: none;
+    color: #ccc;
+}
+.bulan-filter a.active {
+    color: #F44336;
+}
+
+
+
 
 .transaction-history-header h2 {
     font-size: 1.3rem;
@@ -38,12 +61,12 @@
     margin-bottom: 8px;
 }
 .service-name {
-    font-size: 1.08rem;
+    font-size: small;
     font-weight: 500;
     color: #222;
 }
 .transaction-date {
-    font-size: 0.93rem;
+    font-size: small;
     color: #aaa;
     font-weight: 400;
 }
@@ -55,7 +78,7 @@
     flex: 1;
 }
 .transaction-amount {
-    font-size: 1.18rem;
+    font-size: large;
     font-weight: 600;
     letter-spacing: 1px;
 }
@@ -69,17 +92,20 @@
 /* Show more button */
 .show-more-btn {
     display: block;
-    margin: 24px auto 0 auto;
+    margin: 36px auto 0 auto;
     color: #F44336;
     background: none;
     border: none;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: bold;
     cursor: pointer;
     transition: color 0.2s;
 }
 .show-more-btn:hover {
     color: #b71c1c;
+}
+.history-card {
+    text-align: center;
 }
 
 @media (max-width: 600px) {

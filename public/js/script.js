@@ -1,10 +1,35 @@
-// Helper untuk menampilkan alert
+// alert
 function showProfileAlert(message, type = 'success') {
     const alertDiv = document.getElementById('profile-alert');
     alertDiv.textContent = message;
     alertDiv.style.display = 'block';
     alertDiv.className = type === 'success' ? 'alert-success' : 'alert-error';
 }
+
+//slider promo
+document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.getElementById('promo-slider');
+    if (!slider) return;
+
+    let scrollAmount = 0;
+    const scrollStep = slider.offsetWidth / 2; 
+    const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+    function autoScroll() {
+        if (scrollAmount < maxScroll) {
+            scrollAmount += scrollStep;
+        } else {
+            scrollAmount = 0; 
+        }
+        slider.scrollTo({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    setInterval(autoScroll, 2000); 
+});
+
 
 // Toggle Saldo
 function toggleSaldo() {
@@ -13,7 +38,7 @@ function toggleSaldo() {
     const toggleText = document.getElementById('toggle-saldo-text');
     let isHidden = true;
     if (!saldoValue || !toggleBtn || !toggleText) return;
-    // Ambil saldo asli dari data attribute
+    
     const saldoAsli = saldoValue.getAttribute('data-saldo');
     toggleBtn.addEventListener('click', function() {
         if (isHidden) {
@@ -27,6 +52,7 @@ function toggleSaldo() {
     });
 }
 
+//logout
 const apiLogoutUrl = '/logout';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -62,254 +88,113 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleSaldo();
 });
 
+//modal confirm transaksi
 document.addEventListener('DOMContentLoaded', function() {
-    const topupBtn = document.getElementById('topup-submit-btn');
-    const modal = document.getElementById('topup-modal');
-    const confirmBtn = document.getElementById('confirm-topup');
-    const cancelBtn = document.getElementById('cancel-topup');
-    const modalIcon = document.getElementById('modal-topup-icon');
-    const modalMsg = document.getElementById('modal-topup-message');
-    const modalNominal = document.getElementById('modal-topup-nominal');
-    const modalAction = document.getElementById('modal-topup-action');
-    const modalBack = document.getElementById('modal-topup-back');
-    const nominalInput = document.querySelector('input[name=\"nominal\"]');
-
-    let nominalValue = 0;
-
-    if (topupBtn && modal && confirmBtn && cancelBtn) {
-        topupBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            nominalValue = nominalInput.value;
-            // Tampilkan modal konfirmasi
-            modal.classList.add('show');
-            modalIcon.innerHTML = '<span class=\"icon-wallet\"><i class=\"fa fa-wallet\"></i></span>';
-            modalMsg.innerHTML = 'Anda yakin untuk Top Up sebesar';
-            modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b> ?';
-            modalAction.style.display = '';
-            modalBack.style.display = 'none';
-        });
-
-        cancelBtn.addEventListener('click', function() {
-            modal.classList.remove('show');
-        });
-
-        confirmBtn.addEventListener('click', function() {
-            // Kirim AJAX ke endpoint topup
-            fetch('/topup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'nominal=' + encodeURIComponent(nominalValue)
-            })
-            .then(res => res.json())
-            .then(res => {
-                modalAction.style.display = 'none';
-                modalBack.style.display = '';
-                if (res.status === 'success') {
-                    modalIcon.innerHTML = '<span class=\"icon-check\"><i class=\"fa fa-check\"></i></span>';
-                    modalMsg.innerHTML = 'Top Up sebesar';
-                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>berhasil!';
-                } else {
-                    modalIcon.innerHTML = '<span class=\"icon-cross\"><i class=\"fa fa-times\"></i></span>';
-                    modalMsg.innerHTML = 'Top Up sebesar';
-                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>gagal';
-                }
-            })
-            .catch(() => {
-                modalAction.style.display = 'none';
-                modalBack.style.display = '';
-                modalIcon.innerHTML = '<span class=\"icon-cross\"><i class=\"fa fa-times\"></i></span>';
-                modalMsg.innerHTML = 'Top Up gagal';
-                modalNominal.innerHTML = '';
-            });
-        });
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const pbbBtn = document.getElementById('pbb-submit-btn');
-    const modal = document.getElementById('pbb-modal');
-    const confirmBtn = document.getElementById('confirm-pbb');
-    const cancelBtn = document.getElementById('cancel-pbb');
-    const modalIcon = document.getElementById('modal-pbb-icon');
-    const modalMsg = document.getElementById('modal-pbb-message');
-    const modalNominal = document.getElementById('modal-pbb-nominal');
-    const modalAction = document.getElementById('modal-pbb-action');
-    const modalBack = document.getElementById('modal-pbb-back');
+    const modal = document.getElementById('modaltransaction');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const modalIcon = document.getElementById('modal-icon');
+    const modalMsg = document.getElementById('modal-message');
+    const modalNominal = document.getElementById('modal-nominal');
+    const modalAction = document.getElementById('modal-action');
+    const modalBack = document.getElementById('modal-back');
     const nominalInput = document.querySelector('input[name="nominal"]');
-
+    let endpoint = '';
+    let label = '';
     let nominalValue = 0;
 
-    if (pbbBtn && modal && confirmBtn && cancelBtn) {
-        pbbBtn.addEventListener('click', function(e) {
+    document.querySelectorAll('.submit-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
             e.preventDefault();
+            endpoint = btn.dataset.endpoint;
+            label = btn.dataset.label;
             nominalValue = nominalInput.value;
             modal.classList.add('show');
             modalIcon.innerHTML = '<span class="icon-wallet"><i class="fa fa-wallet"></i></span>';
-            modalMsg.innerHTML = 'Anda yakin untuk membayar PBB sebesar';
-            modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b> ?';
+            modalMsg.innerHTML = `Anda yakin untuk membayar ${label} sebesar`;
+            modalNominal.innerHTML = `<b>Rp${parseInt(nominalValue).toLocaleString('id-ID')}</b> ?`;
             modalAction.style.display = '';
             modalBack.style.display = 'none';
         });
+    });
 
-        cancelBtn.addEventListener('click', function() {
-            modal.classList.remove('show');
-        });
+    cancelBtn.addEventListener('click', function() {
+        modal.classList.remove('show');
+    });
 
-        confirmBtn.addEventListener('click', function() {
-            fetch('/pbb', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'nominal=' + encodeURIComponent(nominalValue)
-            })
-            .then(res => res.json())
-            .then(res => {
-                modalAction.style.display = 'none';
-                modalBack.style.display = '';
-                if (res.status === 'success') {
-                    modalIcon.innerHTML = '<span class="icon-check"><i class="fa fa-check"></i></span>';
-                    modalMsg.innerHTML = 'Pembayaran PBB sebesar';
-                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>berhasil!';
-                } else {
-                    modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
-                    modalMsg.innerHTML = 'Pembayaran PBB sebesar';
-                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>gagal';
-                }
-            })
-            .catch(() => {
-                modalAction.style.display = 'none';
-                modalBack.style.display = '';
+    confirmBtn.addEventListener('click', function() {
+        fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'nominal=' + encodeURIComponent(nominalValue)
+        })
+        .then(res => res.json())
+        .then(res => {
+            modalAction.style.display = 'none';
+            modalBack.style.display = '';
+            if (res.status === 'success') {
+                modalIcon.innerHTML = '<span class="icon-check"><i class="fa fa-check"></i></span>';
+                modalMsg.innerHTML = `Pembayaran ${label} sebesar`;
+                modalNominal.innerHTML = `<b>Rp${parseInt(nominalValue).toLocaleString('id-ID')}</b><br>berhasil!`;
+            } else {
                 modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
-                modalMsg.innerHTML = 'Pembayaran PBB gagal';
-                modalNominal.innerHTML = '';
-            });
+                modalMsg.innerHTML = `Pembayaran ${label} sebesar`;
+                modalNominal.innerHTML = `<b>Rp${parseInt(nominalValue).toLocaleString('id-ID')}</b><br>gagal`;
+            }
+        })
+        .catch(() => {
+            modalAction.style.display = 'none';
+            modalBack.style.display = '';
+            modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
+            modalMsg.innerHTML = `Pembayaran ${label} gagal`;
+            modalNominal.innerHTML = '';
         });
-    }
-});
-document.addEventListener('DOMContentLoaded', function() {
-    const listrikBtn = document.getElementById('listrik-submit-btn');
-    const modal = document.getElementById('listrik-modal');
-    const confirmBtn = document.getElementById('confirm-listrik');
-    const cancelBtn = document.getElementById('cancel-listrik');
-    const modalIcon = document.getElementById('modal-listrik-icon');
-    const modalMsg = document.getElementById('modal-listrik-message');
-    const modalNominal = document.getElementById('modal-listrik-nominal');
-    const modalAction = document.getElementById('modal-listrik-action');
-    const modalBack = document.getElementById('modal-listrik-back');
-    const nominalInput = document.querySelector('input[name="nominal"]');
-
-    let nominalValue = 0;
-
-    if (listrikBtn && modal && confirmBtn && cancelBtn) {
-        listrikBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            nominalValue = nominalInput.value;
-            modal.classList.add('show');
-            modalIcon.innerHTML = '<span class="icon-wallet"><i class="fa fa-wallet"></i></span>';
-            modalMsg.innerHTML = 'Anda yakin untuk membayar Listrik sebesar';
-            modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b> ?';
-            modalAction.style.display = '';
-            modalBack.style.display = 'none';
-        });
-
-        cancelBtn.addEventListener('click', function() {
-            modal.classList.remove('show');
-        });
-
-        confirmBtn.addEventListener('click', function() {
-            fetch('/listrik', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'nominal=' + encodeURIComponent(nominalValue)
-            })
-            .then(res => res.json())
-            .then(res => {
-                modalAction.style.display = 'none';
-                modalBack.style.display = '';
-                if (res.status === 'success') {
-                    modalIcon.innerHTML = '<span class="icon-check"><i class="fa fa-check"></i></span>';
-                    modalMsg.innerHTML = 'Pembayaran Listrik sebesar';
-                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>berhasil!';
-                } else {
-                    modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
-                    modalMsg.innerHTML = 'Pembayaran Listrik sebesar';
-                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>gagal';
-                }
-            })
-            .catch(() => {
-                modalAction.style.display = 'none';
-                modalBack.style.display = '';
-                modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
-                modalMsg.innerHTML = 'Pembayaran Listrik gagal';
-                modalNominal.innerHTML = '';
-            });
-        });
-    }
-});
-document.addEventListener('DOMContentLoaded', function() {
-    const pulsaBtn = document.getElementById('pulsa-submit-btn');
-    const modal = document.getElementById('pulsa-modal');
-    const confirmBtn = document.getElementById('confirm-pulsa');
-    const cancelBtn = document.getElementById('cancel-pulsa');
-    const modalIcon = document.getElementById('modal-pulsa-icon');
-    const modalMsg = document.getElementById('modal-pulsa-message');
-    const modalNominal = document.getElementById('modal-pulsa-nominal');
-    const modalAction = document.getElementById('modal-pulsa-action');
-    const modalBack = document.getElementById('modal-pulsa-back');
-    const nominalInput = document.querySelector('input[name="nominal"]');
-
-    let nominalValue = 0;
-
-    if (pulsaBtn && modal && confirmBtn && cancelBtn) {
-        pulsaBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            nominalValue = nominalInput.value;
-            modal.classList.add('show');
-            modalIcon.innerHTML = '<span class="icon-wallet"><i class="fa fa-wallet"></i></span>';
-            modalMsg.innerHTML = 'Anda yakin untuk membayar pulsa sebesar';
-            modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b> ?';
-            modalAction.style.display = '';
-            modalBack.style.display = 'none';
-        });
-
-        cancelBtn.addEventListener('click', function() {
-            modal.classList.remove('show');
-        });
-
-        confirmBtn.addEventListener('click', function() {
-            fetch('/pulsa', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'nominal=' + encodeURIComponent(nominalValue)
-            })
-            .then(res => res.json())
-            .then(res => {
-                modalAction.style.display = 'none';
-                modalBack.style.display = '';
-                if (res.status === 'success') {
-                    modalIcon.innerHTML = '<span class="icon-check"><i class="fa fa-check"></i></span>';
-                    modalMsg.innerHTML = 'Pembayaran pulsa sebesar';
-                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>berhasil!';
-                } else {
-                    modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
-                    modalMsg.innerHTML = 'Pembayaran pulsa sebesar';
-                    modalNominal.innerHTML = '<b>Rp' + parseInt(nominalValue).toLocaleString('id-ID') + '</b><br>gagal';
-                }
-            })
-            .catch(() => {
-                modalAction.style.display = 'none';
-                modalBack.style.display = '';
-                modalIcon.innerHTML = '<span class="icon-cross"><i class="fa fa-times"></i></span>';
-                modalMsg.innerHTML = 'Pembayaran pulsa gagal';
-                modalNominal.innerHTML = '';
-            });
-        });
-    }
+    });
 });
 
+//button topup nominal
 document.querySelectorAll('.topup-nominal-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
         document.querySelector('input[name="nominal"]').value = this.dataset.value;
         document.getElementById('topup-submit-btn').disabled = false;
         document.getElementById('topup-submit-btn').classList.add('active');
     });
+});
+
+//button show more history transaksi
+document.getElementById('show-more-btn').addEventListener('click', function() {
+    let btn = this;
+    let offset = parseInt(btn.getAttribute('data-offset'));
+    let limit = parseInt(btn.getAttribute('data-limit'));
+
+    fetch(`/transaction/more?offset=${offset}&limit=${limit}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                let container = document.getElementById('transaction-list');
+                data.forEach(t => {
+                    let html = `
+                        <div class="transaction-card">
+                            <div class="card-header">
+                                <div class="amount-container">
+                                    <span class="transaction-amount ${t.transaction_type === 'TOPUP' ? 'amount-plus' : 'amount-minus'}">
+                                        ${t.transaction_type === 'TOPUP' ? '+ ' : '- '}Rp${parseInt(t.total_amount).toLocaleString('id-ID')}
+                                    </span>
+                                </div>
+                                <div class="service-name">${t.service_name}</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="transaction-date">
+                                    ${new Date(t.created_on).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric'})}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', html);
+                });
+                btn.setAttribute('data-offset', offset + limit);
+            } else {
+                btn.style.display = 'none'; // Sembunyikan tombol jika data habis
+            }
+        });
 });

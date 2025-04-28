@@ -30,27 +30,32 @@
         <span>Pembayaran</span><br>
         <div class="transaction-label">
             <img src="<?= base_url('assets/icons/listrik.png') ?>" alt="listrik">
-            <span>Listrik</span>
+            <span>Listrik Prabayar</span>
         </div> 
         <form action="<?= base_url('listrik') ?>" method="post" class="transaction-form">
-            <input type="number" name="nominal" placeholder="Masukan Nominal Pembayaran listrik">
-            <button type="submit" class="listrik-submit-btn" id="listrik-submit-btn">Bayar</button>
+            <div class="input-group-transaction">
+                <span class="input-icon-transaction">
+                    <i class="fa-solid fa-money-bill"></i>
+                </span>
+                <input type="number" name="nominal" placeholder="Masukan Nominal Pembayaran listrik">
+            </div>
+            <button type="button" class="submit-btn listrik-submit-btn" data-endpoint="<?= base_url('listrik') ?>" data-label="Listrik" id="listrik-submit-btn">Bayar</button>
         </form>
     </div>
 </main>
-<div class="modal" id="listrik-modal">
-  <div class="modal-content">
-    <div id="modal-listrik-icon" class="modal-topup-icon"></div>
-    <div id="modal-listrik-message" class="modal-topup-message"></div>
-    <div id="modal-listrik-nominal" class="modal-topup-nominal"></div>
-    <div id="modal-listrik-action" class="modal-topup-action">
-      <button id="confirm-listrik" class="btn-confirm-topup">Ya, lanjutkan Bayar</button>
-      <button id="cancel-listrik" class="btn-cancel-topup">Batalkan</button>
+<div class="modal" id="modaltransaction">
+    <div class="modal-content">
+        <div id="modal-icon" class="modal-topup-icon"></div>
+        <div id="modal-message" class="modal-topup-message"></div>
+        <div id="modal-nominal" class="modal-topup-nominal"></div>
+        <div id="modal-action" class="modal-topup-action">
+            <button id="confirm-btn" class="btn-confirm-topup">Ya, lanjutkan Bayar</button>
+            <button id="cancel-btn" class="btn-cancel-topup">Batalkan</button>
+        </div>
+        <div id="modal-back" class="modal-topup-back" style="display:none;">
+            <a href="/" class="btn-back-topup">Kembali ke Beranda</a>
+        </div>
     </div>
-    <div id="modal-listrik-back" class="modal-topup-back" style="display:none;">
-      <a href="/" class="btn-back-topup">Kembali ke Beranda</a>
-    </div>
-  </div>
 </div>
 
 

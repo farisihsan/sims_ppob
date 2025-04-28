@@ -2,6 +2,7 @@
 
 use CodeIgniter\Router\RouteCollection;
 
+
 /**
  * @var RouteCollection $routes
  */
@@ -25,19 +26,53 @@ $routes->group('', ['namespace' => 'App\Controllers', 'filter' => 'auth'], funct
     $routes->get('topup', 'HomeController::topup');
     $routes->get('profile', 'HomeController::profile');
     $routes->group('', ['namespace' => 'App\Controllers\Api'], function($routes) {
-        $routes->post('/profile/update', 'Api\AuthController::updateProfile');
-        $routes->post('logout', 'Api\AuthController::logout');
-        $routes->post('profile/image', 'Api\AuthController::uploadPhoto');
+        $routes->post('profile/update', 'AuthController::updateProfile');
+        $routes->post('logout', 'AuthController::logout');
+        $routes->post('profile/image', 'AuthController::uploadPhoto');
     });
 
-    $routes->get('transaksi', 'HomeController::transaksi');
-    
+    $routes->get('transaksi/history', 'HomeController::transaksi');
+    $routes->get('transaction/more', 'HomeController::getMoreHistory');
+
+    // Routes transaksi
     $routes->post('topup', 'TransaksiController::topup');
+
     $routes->get('pbb', 'HomeController::pbb');
     $routes->post('pbb', 'TransaksiController::pbb');
+
     $routes->get('listrik', 'HomeController::listrik');
     $routes->post('listrik', 'TransaksiController::listrik');
+
     $routes->get('pulsa', 'HomeController::pulsa');
     $routes->post('pulsa', 'TransaksiController::pulsa');
+
+    $routes->get('pdam', 'HomeController::pdam');
+    $routes->post('pdam', 'TransaksiController::pdam');
+
+    $routes->get('pgn', 'HomeController::pgn');
+    $routes->post('pgn', 'TransaksiController::pgn');
+
+    $routes->get('tv-langganan', 'HomeController::tv_langganan');
+    $routes->post('tv-langganan', 'TransaksiController::tv_langganan');
+
+    $routes->get('musik', 'HomeController::musik');
+    $routes->post('musik', 'TransaksiController::musik');
+
+    $routes->get('voucher-game', 'HomeController::voucher_game');
+    $routes->post('voucher-game', 'TransaksiController::voucher_game');
+
+    $routes->get('voucher-makanan', 'HomeController::voucher_makanan');
+    $routes->post('voucher-makanan', 'TransaksiController::voucher_makanan');
+
+    $routes->get('kurban', 'HomeController::kurban');
+    $routes->post('kurban', 'TransaksiController::kurban');
+
+    $routes->get('zakat', 'HomeController::zakat');
+    $routes->post('zakat', 'TransaksiController::zakat');
+    
+    $routes->get('paket-data', 'HomeController::paket_data');
+    $routes->post('paket-data', 'TransaksiController::paket_data');
 });
+
+
     

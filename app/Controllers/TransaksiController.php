@@ -9,6 +9,13 @@ use App\Models\User;
 
 class TransaksiController extends ResourceController
 {
+    protected $timezone;
+
+    public function __construct()
+    {
+        $this->timezone = new \DateTimeZone('Asia/Jakarta');
+    }
+
     /**
      * Return an array of resource objects, themselves in array format.
      *
@@ -51,7 +58,7 @@ class TransaksiController extends ResourceController
         $transactionModel = new Transaction();
         $userModel = new User();
 
-        // Simpan transaksi
+        
         $data = [
             'invoice_number'    => $invoice_number,
             'user_id'           => $user['id'],
@@ -59,11 +66,11 @@ class TransaksiController extends ResourceController
             'service_name'      => 'Top Up',
             'transaction_type'  => 'TOPUP',
             'total_amount'      => $nominal,
-            'created_on'        => date('Y-m-d H:i:s'),
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
         ];
         $transactionModel->insert($data);
 
-        // Update saldo user
+        
         $userData = $userModel->find($user['id']);
         if (!$userData) {
             return $this->failNotFound('User tidak ditemukan.');
@@ -72,11 +79,11 @@ class TransaksiController extends ResourceController
             'saldo' => $userData['saldo'] + $nominal
         ]);
 
-        // Update session saldo
+        
         $user['saldo'] = $userData['saldo'] + $nominal;
         session()->set('user', $user);
 
-        // Kembalikan response JSON
+        
         return $this->respond([
             'status' => 'success',
             'message' => 'Top up berhasil',
@@ -97,7 +104,7 @@ class TransaksiController extends ResourceController
             return $this->failNotFound('User tidak ditemukan.');
         }
 
-        // Cek saldo dari database, bukan dari session
+        
         if ($nominal > $userData['saldo']) {
             return $this->failValidationErrors('Saldo tidak cukup');
         }
@@ -105,7 +112,7 @@ class TransaksiController extends ResourceController
         $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
         $transactionModel = new Transaction();
 
-        // Simpan transaksi
+        
         $data = [
             'invoice_number'    => $invoice_number,
             'user_id'           => $user['id'],
@@ -113,20 +120,20 @@ class TransaksiController extends ResourceController
             'service_name'      => 'Pembayaran PBB',
             'transaction_type'  => 'PAYMENT',
             'total_amount'      => $nominal,
-            'created_on'        => date('Y-m-d H:i:s'),
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
         ];
         $transactionModel->insert($data);
 
-        // Update saldo user di database
+        
         $userModel->update($user['id'], [
             'saldo' => $userData['saldo'] - $nominal
         ]);
 
-        // Update session saldo
+        
         $user['saldo'] = $userData['saldo'] - $nominal;
         session()->set('user', $user);
 
-        // Kembalikan response JSON
+        
         return $this->respond([
             'status' => 'success',
             'message' => 'Pembayaran PBB berhasil',
@@ -147,7 +154,7 @@ class TransaksiController extends ResourceController
             return $this->failNotFound('User tidak ditemukan.');
         }
 
-        // Cek saldo dari database, bukan dari session
+        
         if ($nominal > $userData['saldo']) {
             return $this->failValidationErrors('Saldo tidak cukup');
         }
@@ -155,7 +162,7 @@ class TransaksiController extends ResourceController
         $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
         $transactionModel = new Transaction();
 
-        // Simpan transaksi
+        
         $data = [
             'invoice_number'    => $invoice_number,
             'user_id'           => $user['id'],
@@ -163,20 +170,20 @@ class TransaksiController extends ResourceController
             'service_name'      => 'Pembayaran Listrik',
             'transaction_type'  => 'PAYMENT',
             'total_amount'      => $nominal,
-            'created_on'        => date('Y-m-d H:i:s'),
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
         ];
         $transactionModel->insert($data);
 
-        // Update saldo user di database
+        
         $userModel->update($user['id'], [
             'saldo' => $userData['saldo'] - $nominal
         ]);
 
-        // Update session saldo
+        
         $user['saldo'] = $userData['saldo'] - $nominal;
         session()->set('user', $user);
 
-        // Kembalikan response JSON
+        
         return $this->respond([
             'status' => 'success',
             'message' => 'Pembayaran listrik berhasil',
@@ -197,7 +204,7 @@ class TransaksiController extends ResourceController
             return $this->failNotFound('User tidak ditemukan.');
         }
 
-        // Cek saldo dari database, bukan dari session
+        
         if ($nominal > $userData['saldo']) {
             return $this->failValidationErrors('Saldo tidak cukup');
         }
@@ -205,7 +212,7 @@ class TransaksiController extends ResourceController
         $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
         $transactionModel = new Transaction();
 
-        // Simpan transaksi
+        
         $data = [
             'invoice_number'    => $invoice_number,
             'user_id'           => $user['id'],
@@ -213,23 +220,475 @@ class TransaksiController extends ResourceController
             'service_name'      => 'Pembayaran pulsa',
             'transaction_type'  => 'PAYMENT',
             'total_amount'      => $nominal,
-            'created_on'        => date('Y-m-d H:i:s'),
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
         ];
         $transactionModel->insert($data);
 
-        // Update saldo user di database
+        
         $userModel->update($user['id'], [
             'saldo' => $userData['saldo'] - $nominal
         ]);
 
-        // Update session saldo
+        
         $user['saldo'] = $userData['saldo'] - $nominal;
         session()->set('user', $user);
 
-        // Kembalikan response JSON
+        
         return $this->respond([
             'status' => 'success',
             'message' => 'Pembayaran pulsa berhasil',
+            'invoice_number' => $invoice_number,
+            'saldo' => $user['saldo']
+        ]);
+    }
+    
+    public function pdam(){
+        $user = session()->get('user');
+        if (!$user) {
+            return $this->failUnauthorized('User tidak ditemukan.');
+        }
+        $nominal = $this->request->getVar('nominal');
+
+        $userModel = new User();
+        $userData = $userModel->find($user['id']);
+        if (!$userData) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
+        
+        if ($nominal > $userData['saldo']) {
+            return $this->failValidationErrors('Saldo tidak cukup');
+        }
+
+        $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
+        $transactionModel = new Transaction();
+
+        
+        $data = [
+            'invoice_number'    => $invoice_number,
+            'user_id'           => $user['id'],
+            'service_code'      => 'PDAM',
+            'service_name'      => 'Pembayaran PDAM',
+            'transaction_type'  => 'PAYMENT',
+            'total_amount'      => $nominal,
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
+        ];
+        $transactionModel->insert($data);
+
+        
+        $userModel->update($user['id'], [
+            'saldo' => $userData['saldo'] - $nominal
+        ]);
+
+        
+        $user['saldo'] = $userData['saldo'] - $nominal;
+        session()->set('user', $user);
+
+        
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Pembayaran PDAM berhasil',
+            'invoice_number' => $invoice_number,
+            'saldo' => $user['saldo']
+        ]);
+    }
+    
+    public function pgn(){
+        $user = session()->get('user');
+        if (!$user) {
+            return $this->failUnauthorized('User tidak ditemukan.');
+        }
+        $nominal = $this->request->getVar('nominal');
+
+        $userModel = new User();
+        $userData = $userModel->find($user['id']);
+        if (!$userData) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
+        
+        if ($nominal > $userData['saldo']) {
+            return $this->failValidationErrors('Saldo tidak cukup');
+        }
+
+        $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
+        $transactionModel = new Transaction();
+
+        
+        $data = [
+            'invoice_number'    => $invoice_number,
+            'user_id'           => $user['id'],
+            'service_code'      => 'PGN',
+            'service_name'      => 'Pembayaran PGN',
+            'transaction_type'  => 'PAYMENT',
+            'total_amount'      => $nominal,
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
+        ];
+        $transactionModel->insert($data);
+
+        
+        $userModel->update($user['id'], [
+            'saldo' => $userData['saldo'] - $nominal
+        ]);
+
+        
+        $user['saldo'] = $userData['saldo'] - $nominal;
+        session()->set('user', $user);
+
+        
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Pembayaran PGN berhasil',
+            'invoice_number' => $invoice_number,
+            'saldo' => $user['saldo']
+        ]);
+    }
+    public function tv_langganan(){
+        $user = session()->get('user');
+        if (!$user) {
+            return $this->failUnauthorized('User tidak ditemukan.');
+        }
+        $nominal = $this->request->getVar('nominal');
+
+        $userModel = new User();
+        $userData = $userModel->find($user['id']);
+        if (!$userData) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
+        
+        if ($nominal > $userData['saldo']) {
+            return $this->failValidationErrors('Saldo tidak cukup');
+        }
+
+        $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
+        $transactionModel = new Transaction();
+
+        
+        $data = [
+            'invoice_number'    => $invoice_number,
+            'user_id'           => $user['id'],
+            'service_code'      => 'TV_LANGGANAN',
+            'service_name'      => 'Pembayaran TV Langganan',
+            'transaction_type'  => 'PAYMENT',
+            'total_amount'      => $nominal,
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
+        ];
+        $transactionModel->insert($data);
+
+        
+        $userModel->update($user['id'], [
+            'saldo' => $userData['saldo'] - $nominal
+        ]);
+
+        
+        $user['saldo'] = $userData['saldo'] - $nominal;
+        session()->set('user', $user);
+
+        
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Pembayaran TV Langganan berhasil',
+            'invoice_number' => $invoice_number,
+            'saldo' => $user['saldo']
+        ]);
+    }
+    public function musik(){
+        $user = session()->get('user');
+        if (!$user) {
+            return $this->failUnauthorized('User tidak ditemukan.');
+        }
+        $nominal = $this->request->getVar('nominal');
+
+        $userModel = new User();
+        $userData = $userModel->find($user['id']);
+        if (!$userData) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
+        
+        if ($nominal > $userData['saldo']) {
+            return $this->failValidationErrors('Saldo tidak cukup');
+        }
+
+        $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
+        $transactionModel = new Transaction();
+
+        
+        $data = [
+            'invoice_number'    => $invoice_number,
+            'user_id'           => $user['id'],
+            'service_code'      => 'MUSIK',
+            'service_name'      => 'Pembayaran Musik',
+            'transaction_type'  => 'PAYMENT',
+            'total_amount'      => $nominal,
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
+        ];
+        $transactionModel->insert($data);
+
+        
+        $userModel->update($user['id'], [
+            'saldo' => $userData['saldo'] - $nominal
+        ]);
+
+        
+        $user['saldo'] = $userData['saldo'] - $nominal;
+        session()->set('user', $user);
+
+        
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Pembayaran Musik berhasil',
+            'invoice_number' => $invoice_number,
+            'saldo' => $user['saldo']
+        ]);
+    }
+    public function voucher_game(){
+        $user = session()->get('user');
+        if (!$user) {
+            return $this->failUnauthorized('User tidak ditemukan.');
+        }
+        $nominal = $this->request->getVar('nominal');
+
+        $userModel = new User();
+        $userData = $userModel->find($user['id']);
+        if (!$userData) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
+        
+        if ($nominal > $userData['saldo']) {
+            return $this->failValidationErrors('Saldo tidak cukup');
+        }
+
+        $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
+        $transactionModel = new Transaction();
+
+        
+        $data = [
+            'invoice_number'    => $invoice_number,
+            'user_id'           => $user['id'],
+            'service_code'      => 'VOUCHER_GAME',
+            'service_name'      => 'Pembayaran Voucher Game',
+            'transaction_type'  => 'PAYMENT',
+            'total_amount'      => $nominal,
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
+        ];
+        $transactionModel->insert($data);
+
+        
+        $userModel->update($user['id'], [
+            'saldo' => $userData['saldo'] - $nominal
+        ]);
+
+        
+        $user['saldo'] = $userData['saldo'] - $nominal;
+        session()->set('user', $user);
+
+        
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Pembayaran Voucher Game berhasil',
+            'invoice_number' => $invoice_number,
+            'saldo' => $user['saldo']
+        ]);
+    }
+    public function voucher_makanan(){
+        $user = session()->get('user');
+        if (!$user) {
+            return $this->failUnauthorized('User tidak ditemukan.');
+        }
+        $nominal = $this->request->getVar('nominal');
+
+        $userModel = new User();
+        $userData = $userModel->find($user['id']);
+        if (!$userData) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
+        
+        if ($nominal > $userData['saldo']) {
+            return $this->failValidationErrors('Saldo tidak cukup');
+        }
+
+        $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
+        $transactionModel = new Transaction();
+
+        
+        $data = [
+            'invoice_number'    => $invoice_number,
+            'user_id'           => $user['id'],
+            'service_code'      => 'VOUCHER_MAKANAN',
+            'service_name'      => 'Pembayaran Voucher Makanan',
+            'transaction_type'  => 'PAYMENT',
+            'total_amount'      => $nominal,
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
+        ];
+        $transactionModel->insert($data);
+
+        
+        $userModel->update($user['id'], [
+            'saldo' => $userData['saldo'] - $nominal
+        ]);
+
+        
+        $user['saldo'] = $userData['saldo'] - $nominal;
+        session()->set('user', $user);
+
+        
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Pembayaran Voucher Makanan berhasil',
+            'invoice_number' => $invoice_number,
+            'saldo' => $user['saldo']
+        ]);
+    }
+    public function kurban(){
+        $user = session()->get('user');
+        if (!$user) {
+            return $this->failUnauthorized('User tidak ditemukan.');
+        }
+        $nominal = $this->request->getVar('nominal');
+
+        $userModel = new User();
+        $userData = $userModel->find($user['id']);
+        if (!$userData) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
+        
+        if ($nominal > $userData['saldo']) {
+            return $this->failValidationErrors('Saldo tidak cukup');
+        }
+
+        $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
+        $transactionModel = new Transaction();
+
+        
+        $data = [
+            'invoice_number'    => $invoice_number,
+            'user_id'           => $user['id'],
+            'service_code'      => 'KURBAN',
+            'service_name'      => 'Pembayaran Kurban',
+            'transaction_type'  => 'PAYMENT',
+            'total_amount'      => $nominal,
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
+        ];
+        $transactionModel->insert($data);
+
+        
+        $userModel->update($user['id'], [
+            'saldo' => $userData['saldo'] - $nominal
+        ]);
+
+        
+        $user['saldo'] = $userData['saldo'] - $nominal;
+        session()->set('user', $user);
+
+        
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Pembayaran Kurban berhasil',
+            'invoice_number' => $invoice_number,
+            'saldo' => $user['saldo']
+        ]);
+    }
+    public function zakat(){
+        $user = session()->get('user');
+        if (!$user) {
+            return $this->failUnauthorized('User tidak ditemukan.');
+        }
+        $nominal = $this->request->getVar('nominal');
+
+        $userModel = new User();
+        $userData = $userModel->find($user['id']);
+        if (!$userData) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
+        
+        if ($nominal > $userData['saldo']) {
+            return $this->failValidationErrors('Saldo tidak cukup');
+        }
+
+        $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
+        $transactionModel = new Transaction();
+
+        
+        $data = [
+            'invoice_number'    => $invoice_number,
+            'user_id'           => $user['id'],
+            'service_code'      => 'ZAKAT',
+            'service_name'      => 'Pembayaran Zakat',
+            'transaction_type'  => 'PAYMENT',
+            'total_amount'      => $nominal,
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
+        ];
+        $transactionModel->insert($data);
+
+        
+        $userModel->update($user['id'], [
+            'saldo' => $userData['saldo'] - $nominal
+        ]);
+
+        
+        $user['saldo'] = $userData['saldo'] - $nominal;
+        session()->set('user', $user);
+
+        
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Pembayaran Zakat berhasil',
+            'invoice_number' => $invoice_number,
+            'saldo' => $user['saldo']
+        ]);
+    }
+    public function paket_data(){
+        $user = session()->get('user');
+        if (!$user) {
+            return $this->failUnauthorized('User tidak ditemukan.');
+        }
+        $nominal = $this->request->getVar('nominal');
+
+        $userModel = new User();
+        $userData = $userModel->find($user['id']);
+        if (!$userData) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
+        
+        if ($nominal > $userData['saldo']) {
+            return $this->failValidationErrors('Saldo tidak cukup');
+        }
+
+        $invoice_number = 'INV' . strtoupper(bin2hex(random_bytes(5)));
+        $transactionModel = new Transaction();
+
+        
+        $data = [
+            'invoice_number'    => $invoice_number,
+            'user_id'           => $user['id'],
+            'service_code'      => 'PAKET_DATA',
+            'service_name'      => 'Pembayaran Paket Data',
+            'transaction_type'  => 'PAYMENT',
+            'total_amount'      => $nominal,
+            'created_on'        => (new \DateTime('now', $this->timezone))->format('Y-m-d H:i:s'),
+        ];
+        $transactionModel->insert($data);
+
+        
+        $userModel->update($user['id'], [
+            'saldo' => $userData['saldo'] - $nominal
+        ]);
+
+        
+        $user['saldo'] = $userData['saldo'] - $nominal;
+        session()->set('user', $user);
+
+        
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Pembayaran Paket Data berhasil',
             'invoice_number' => $invoice_number,
             'saldo' => $user['saldo']
         ]);

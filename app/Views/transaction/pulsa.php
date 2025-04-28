@@ -33,24 +33,29 @@
             <span>Pulsa</span>
         </div> 
         <form action="<?= base_url('pulsa') ?>" method="post" class="transaction-form">
-            <input type="number" name="nominal" placeholder="Masukan Nominal Pembayaran Pulsa">
-            <button type="submit" class="pulsa-submit-btn" id="pulsa-submit-btn">Bayar</button>
+            <div class="input-group-transaction">
+                <span class="input-icon-transaction">
+                    <i class="fa-solid fa-money-bill"></i>
+                </span>
+                <input type="number" name="nominal" placeholder="Masukan Nominal Pembayaran Pulsa">
+            </div>
+            <button type="button" class="submit-btn pulsa-submit-btn" data-endpoint="<?= base_url('pulsa') ?>" data-label="Pulsa" id="pulsa-submit-btn">Bayar</button>
         </form>
     </div>
 </main>
-<div class="modal" id="pulsa-modal">
-  <div class="modal-content">
-    <div id="modal-pulsa-icon" class="modal-topup-icon"></div>
-    <div id="modal-pulsa-message" class="modal-topup-message"></div>
-    <div id="modal-pulsa-nominal" class="modal-topup-nominal"></div>
-    <div id="modal-pulsa-action" class="modal-topup-action">
-      <button id="confirm-pulsa" class="btn-confirm-topup">Ya, lanjutkan Bayar</button>
-      <button id="cancel-pulsa" class="btn-cancel-topup">Batalkan</button>
+<div class="modal" id="modaltransaction">
+    <div class="modal-content">
+        <div id="modal-icon" class="modal-topup-icon"></div>
+        <div id="modal-message" class="modal-topup-message"></div>
+        <div id="modal-nominal" class="modal-topup-nominal"></div>
+        <div id="modal-action" class="modal-topup-action">
+            <button id="confirm-btn" class="btn-confirm-topup">Ya, lanjutkan Bayar</button>
+            <button id="cancel-btn" class="btn-cancel-topup">Batalkan</button>
+        </div>
+        <div id="modal-back" class="modal-topup-back" style="display:none;">
+            <a href="/" class="btn-back-topup">Kembali ke Beranda</a>
+        </div>
     </div>
-    <div id="modal-pulsa-back" class="modal-topup-back" style="display:none;">
-      <a href="/" class="btn-back-topup">Kembali ke Beranda</a>
-    </div>
-  </div>
 </div>
 
 

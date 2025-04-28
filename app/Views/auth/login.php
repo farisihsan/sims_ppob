@@ -17,10 +17,11 @@
             
             <h2>Masuk atau buat akun untuk memulai</h2>
             
+            <div id="profile-alert" style="display:none;"></div>
             <?php if (session()->getFlashdata('message')): ?>
-                <div class="alert-success">
-                    <?= session()->getFlashdata('message') ?>
-                </div>
+                <script>
+                    showProfileAlert('<?= session()->getFlashdata('message') ?>', 'success');
+                </script>
             <?php endif; ?>
             
             <form class="auth-form" id="loginForm" action="<?= base_url('login') ?>" method="POST">

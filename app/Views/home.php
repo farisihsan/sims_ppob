@@ -49,7 +49,7 @@
             <img src="/assets/icons/pgn.png" alt="PGN">
             <span>PGN</span>
         </a>
-        <a href="/tv" class="service-item">
+        <a href="/tv-langganan" class="service-item">
             <img src="/assets/icons/Televisi.png" alt="TV Langganan">
             <span>TV Langganan</span>
         </a>
