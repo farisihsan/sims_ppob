@@ -28,7 +28,7 @@ if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
 
 // Path to the front controller (this file)
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
-define('CI_ENVIRONMENT', 'production');
+define('CI_ENVIRONMENT', 'development');
 
 
 // Ensure the current directory is pointing to the front controller's directory
